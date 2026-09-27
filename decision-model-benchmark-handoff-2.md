@@ -27,7 +27,9 @@ rubric scoring, and application routing — on Apple Silicon, GPU-only.
 ## Environment
 
 - Repo: `/Users/dush/Code/benchmarking-decision-models` (Python 3.13 + uv;
-  deps: httpx; pytest dev). **Not committed yet** — no git commits exist.
+  deps: httpx; pytest dev). First commit `45a11d4` (2026-09-28):
+  "BANKING77 + Jigsaw tracks done (GPU-only); handoff 2 state" — code,
+  both result dirs (~13MB), docs, both handoff files.
 - ollaya 0.7.3 daemon on `:11435` (installed system-wide).
   Loaded models: `laya:en` (MLX/Metal), `winnow:e4b` (llama.cpp/Metal).
 - kev.serve: clone at `~/Code/kev-server` (github.com/jaredpalmer/kev),
@@ -111,6 +113,30 @@ latencies are contended upper bounds. Evidence it may be mild: winnow's Jigsaw
 p50 (1285ms) ≈ its clean BANKING77 p50 (1257ms). Accuracy/F1/Brier are
 unaffected. **To fix: re-run the Jigsaw arms sequentially** (same seed → same
 sample; ~25 min total) into a fresh dir or over this one; only latencies change.
+(Status 2026-09-28: still open — deliberately skipped in favor of the
+coverage analysis below.)
+
+## Coverage-vs-error analysis (done 2026-09-28, no model runs)
+
+Method: rank decisions by confidence desc (`confidence` on BANKING77,
+max P(yes)/P(no) on Jigsaw where `confidence` is null), take the largest
+prefix with error ≤ bound. Thresholds are in-sample (optimistic);
+a held-out split would shave these.
+
+Share handleable locally at ≤5% error:
+
+BANKING77 (per arm × tier): decider reduced 1.000 / full 0.652;
+kev reduced 1.000 / full 0.664; winnow reduced 0.872 / full N/A
+(500 option-cap errors); laya reduced 0.644 / full 0.010.
+
+Jigsaw overall (n=504): laya 0.819, winnow 0.817, decider 0.812,
+kev 0.734 (cov @ ≤1%: winnow 0.405, decider 0.401, kev 0.312, laya 0.278).
+
+Reading: on BANKING77-reduced, kev/decider take 100% at ≤5% error (full
+local replacement); on full 77-way, ~2/3 with the rest escalated, laya
+unusable (0.010). On Jigsaw all four converge at 0.73–0.82 — calibration
+equalizes them. Per-criterion: obscene worst for selective prediction
+(laya 0.333, kev 0.452 @ ≤5%); threat near-fully delegable (0.98–1.00).
 
 ## Model limits discovered (carry into all future tracks)
 
@@ -125,9 +151,10 @@ sample; ~25 min total) into a fresh dir or over this one; only latencies change.
 ## What is left
 
 1. **Clean Jigsaw latencies** — sequential re-run of winnow/kev/decider (or all four).
-2. **Coverage-vs-error analysis** — probabilities are stored for every row;
-   compute "share of decisions handled locally at ≤5% error" per arm, both
-   datasets. No model runs needed.
+   Still open (skipped 2026-09-28 in favor of coverage analysis).
+2. **Coverage-vs-error analysis** — DONE 2026-09-28, see "Coverage-vs-error
+   analysis" section above. No artifacts written (derived from stored
+   probabilities); reuse the same method for future tracks.
 3. **HelpSteer2 track** — rubric scoring. Needs `score` support in both
    adapters (2–10 levels, returns expected score + probabilities), rubric
    anchors from the paper (see `docs/dataset-verification.md` §C), canonical
@@ -148,14 +175,14 @@ sample; ~25 min total) into a fresh dir or over this one; only latencies change.
 - Whether to re-run all four Jigsaw arms sequentially or only the contended three.
 - HelpSteer2 sampling design (per-dimension balance; which dimensions).
 - Whether PersonalFinance_v2 is worth manual review at all.
-- First git commit (repo currently has zero commits).
+- ~~First git commit~~ — done 2026-09-28 (`45a11d4`; handoff update committed separately).
 
 ## First actions for the new session
 
 1. Read this file and `decision-model-benchmark-handoff-1.md`.
-2. `git add -A && git commit` to freeze the current state (ask user first).
-3. Pick from "What is left" — recommended order: clean Jigsaw latencies →
-   coverage analysis → HelpSteer2.
+2. Pick from "What is left" — recommended order: clean Jigsaw latencies →
+   HelpSteer2 → PF-Context / PF_v2 decision. (Commit `45a11d4` frozen and
+   coverage analysis complete as of 2026-09-28.)
 
 ## Reproduce any run (examples)
 
