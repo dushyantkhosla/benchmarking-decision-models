@@ -31,6 +31,7 @@ def main() -> None:
     parser.add_argument("--host", default="http://localhost:11435", help="ollaya host")
     parser.add_argument("--kev-host", default="http://localhost:8009", help="kev.serve host (models tagged @kevserve)")
     parser.add_argument("--decider-host", default="http://localhost:8010", help="decider-ai server host (models tagged @decider)")
+    parser.add_argument("--typesafe-host", default="https://api.typesafe.ai", help="hosted TypeSafe API host (models tagged @typesafe)")
     parser.add_argument("--resume", default=None, help="existing run dir to resume/extend")
     args = parser.parse_args()
 
@@ -94,6 +95,7 @@ def main() -> None:
             "ollaya": args.host,
             "kevserve": args.kev_host,
             "decider": args.decider_host,
+            "typesafe": args.typesafe_host,
         },
         dataset_meta=dataset_meta,
         config_meta=config_meta,

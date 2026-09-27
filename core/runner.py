@@ -27,7 +27,8 @@ def _make_adapter(spec: str, hosts: dict[str, str]):
 
     Examples: `kev:4b`, `winnow:e4b` (ollaya);
               `kev:4b@kevserve` (jaredpalmer/kev's local MLX server);
-              `decider:2b@decider` (decider-ai's local server).
+              `decider:2b@decider` (decider-ai's local server);
+              `jev:1.13.0@typesafe` (hosted TypeSafe API, needs TYPESAFE_API_KEY).
     """
     # The full spec (suffix included) is the adapter's model name, so predictions,
     # resume keys, and metric keys all identify the exact runtime arm.
@@ -39,6 +40,11 @@ def _make_adapter(spec: str, hosts: dict[str, str]):
         return TypeSafeServeModel(
             spec,
             TypeSafeConfig(host=hosts["decider"], request_model=spec.removesuffix("@decider")),
+        )
+    if spec.endswith("@typesafe"):
+        return TypeSafeServeModel(
+            spec,
+            TypeSafeConfig(host=hosts["typesafe"], request_model="jev-1.13.0"),
         )
     return OllayaDecisionModel(spec, OllayaConfig(host=hosts["ollaya"]))
 

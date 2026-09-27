@@ -10,6 +10,7 @@ Same conceptual operation as every other adapter:
 
 from __future__ import annotations
 
+import os
 import time
 from dataclasses import dataclass
 
@@ -23,13 +24,22 @@ class TypeSafeConfig:
     host: str = "http://localhost:8009"
     request_model: str = "kev-latest"  # kev.serve serves its checkpoint under this name
     timeout_s: float = 180.0
+    api_key: str | None = None  # Bearer auth for the hosted TypeSafe API; never persisted
+
+    def headers(self) -> dict[str, str]:
+        key = self.api_key or os.environ.get("TYPESAFE_API_KEY")
+        return {"Authorization": f"Bearer {key}"} if key else {}
 
 
 class TypeSafeServeModel:
     def __init__(self, model: str, config: TypeSafeConfig | None = None):
         self.model = model  # benchmark spec, recorded in predictions
         self.config = config or TypeSafeConfig()
-        self._client = httpx.Client(base_url=self.config.host, timeout=self.config.timeout_s)
+        self._client = httpx.Client(
+            base_url=self.config.host,
+            timeout=self.config.timeout_s,
+            headers=self.config.headers(),
+        )
 
     def models(self) -> dict:
         return self._client.get("/v1/models").json()
