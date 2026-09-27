@@ -113,8 +113,8 @@ latencies are contended upper bounds. Evidence it may be mild: winnow's Jigsaw
 p50 (1285ms) ≈ its clean BANKING77 p50 (1257ms). Accuracy/F1/Brier are
 unaffected. **To fix: re-run the Jigsaw arms sequentially** (same seed → same
 sample; ~25 min total) into a fresh dir or over this one; only latencies change.
-(Status 2026-09-28: still open — deliberately skipped in favor of the
-coverage analysis below.)
+(Status 2026-09-28: deprioritized to last — accuracy/coverage are final,
+only the latency columns are affected.)
 
 ## Coverage-vs-error analysis (done 2026-09-28, no model runs)
 
@@ -150,24 +150,24 @@ equalizes them. Per-criterion: obscene worst for selective prediction
 
 ## What is left
 
-1. **Clean Jigsaw latencies** — sequential re-run of winnow/kev/decider (or all four).
-   Still open (skipped 2026-09-28 in favor of coverage analysis).
-2. **Coverage-vs-error analysis** — DONE 2026-09-28, see "Coverage-vs-error
-   analysis" section above. No artifacts written (derived from stored
-   probabilities); reuse the same method for future tracks.
-3. **HelpSteer2 track** — rubric scoring. Needs `score` support in both
+1. **HelpSteer2 track** — rubric scoring. Needs `score` support in both
    adapters (2–10 levels, returns expected score + probabilities), rubric
    anchors from the paper (see `docs/dataset-verification.md` §C), canonical
    split = validation (1,038 rows), ~500 sampled pairs, metrics: exact-match +
    MAE (+ confusion). Expect laya truncation — record it.
-4. **PersonalFinance_v2 routing** — labels are LLM-assisted/synthetic; treat as
+2. **PersonalFinance_v2 routing** — labels are LLM-assisted/synthetic; treat as
    candidate only. Inspect a sample, decide whether to use; may be skipped in
    favor of PF-Context.
-5. **PF-Context (custom)** — design route taxonomy + routing policy +
+3. **PF-Context (custom)** — design route taxonomy + routing policy +
    precedence rules BEFORE generating cases; 200–500 hand-validated cases;
    difficulty groups A–D from handoff-1.
-6. **Optional:** LegalBench; a conventional small-LLM baseline (none benchmarked yet).
-7. **Reporting** — consolidated per-track report once artifacts are stable.
+4. **Optional:** LegalBench; a conventional small-LLM baseline (none benchmarked yet).
+5. **Reporting** — consolidated per-track report once artifacts are stable.
+6. **Clean Jigsaw latencies (deprioritized → last)** — sequential re-run of
+   winnow/kev/decider (or all four). Moved last 2026-09-28: accuracy/F1/Brier
+   and coverage are final; only the latency columns change.
+
+Done 2026-09-28: coverage-vs-error analysis (see section above).
 
 ## Open decisions
 
@@ -180,8 +180,8 @@ equalizes them. Per-criterion: obscene worst for selective prediction
 ## First actions for the new session
 
 1. Read this file and `decision-model-benchmark-handoff-1.md`.
-2. Pick from "What is left" — recommended order: clean Jigsaw latencies →
-   HelpSteer2 → PF-Context / PF_v2 decision. (Commit `45a11d4` frozen and
+2. Pick from "What is left" — recommended order: HelpSteer2 →
+   PF tracks → clean Jigsaw latencies (last). (Commit `45a11d4` frozen and
    coverage analysis complete as of 2026-09-28.)
 
 ## Reproduce any run (examples)
