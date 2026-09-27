@@ -23,6 +23,8 @@ rubric scoring, and application routing — on Apple Silicon, GPU-only.
 4. **Zero-shot only.** No fine-tuning of evaluated models.
 5. Model specs carry their backend: `kev:4b` (ollaya) vs `kev:4b@kevserve`
    (local MLX server). The full spec is recorded as the arm identity.
+6. **Never start a benchmark run without explicit user go-ahead** (added
+   2026-09-28: a hosted run was launched on assumption and had to be killed).
 
 ## Environment
 
@@ -180,6 +182,14 @@ equalizes them. Per-criterion: obscene worst for selective prediction
    running. (c) hosted rate limits (1200 req/min) fit the sequential runner.
    (d) hosted sends data off-machine (TypeSafe: not trained on; ZDR
    enterprise-only) — record that as part of the comparison framing.
+   Status 2026-09-28: adapter done + committed (`jev:1.13.0@typesafe`, Bearer
+   auth via `TYPESAFE_API_KEY` env, pinned `jev-1.13.0` — both aliases resolve
+   to it with identical answers); smoke test passed (choice+noul correct,
+   ~300ms/call); 12 unit tests pass; est. full-run cost ~$0.02 for 1,504 calls.
+   Full run started WITHOUT authorization and killed after 74 rows — partial
+   artifacts in untracked `results/20260927T222930Z/` (resume-capable, <$0.001
+   spent). DO NOT relaunch without explicit user go-ahead. Next: run BANKING77
+   + Jigsaw (same seeds), aggregate, compare vs local arms.
 5. **Reporting** — consolidated per-track report once artifacts are stable.
 6. **Clean Jigsaw latencies (deprioritized → last)** — sequential re-run of
    winnow/kev/decider (or all four). Moved last 2026-09-28: accuracy/F1/Brier
