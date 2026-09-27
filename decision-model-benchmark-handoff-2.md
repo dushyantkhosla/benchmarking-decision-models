@@ -162,6 +162,14 @@ equalizes them. Per-criterion: obscene worst for selective prediction
    precedence rules BEFORE generating cases; 200–500 hand-validated cases;
    difficulty groups A–D from handoff-1.
 4. **Optional:** LegalBench; a conventional small-LLM baseline (none benchmarked yet).
+5. **JEV hosted comparison (new 2026-09-28)** — complete local-vs-hosted picture:
+   add `models/jev.py` adapter for the hosted JEV endpoint (URL/auth/checkpoint
+   TBD), pin the model version, then run BANKING77 (reduced+full) + Jigsaw with
+   the same seeds → identical samples as `jev:*@jevhost` arms. Compare accuracy,
+   calibration/coverage, and latency vs the local arms. Per handoff-1, record
+   backend + precision/runtime with every run. Note: local kevserve on `:8009`
+   already advertises a `jev-latest` name — verify whether it is the same
+   checkpoint before treating hosted-vs-local as apples-to-apples.
 5. **Reporting** — consolidated per-track report once artifacts are stable.
 6. **Clean Jigsaw latencies (deprioritized → last)** — sequential re-run of
    winnow/kev/decider (or all four). Moved last 2026-09-28: accuracy/F1/Brier
@@ -181,8 +189,8 @@ Done 2026-09-28: coverage-vs-error analysis (see section above).
 
 1. Read this file and `decision-model-benchmark-handoff-1.md`.
 2. Pick from "What is left" — recommended order: HelpSteer2 →
-   PF tracks → clean Jigsaw latencies (last). (Commit `45a11d4` frozen and
-   coverage analysis complete as of 2026-09-28.)
+   PF tracks → JEV hosted comparison → clean Jigsaw latencies (last).
+   (Commit `45a11d4` frozen and coverage analysis complete as of 2026-09-28.)
 
 ## Reproduce any run (examples)
 
