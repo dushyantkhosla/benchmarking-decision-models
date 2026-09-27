@@ -1,0 +1,104 @@
+{
+  "winnow:e4b | reduced": {
+    "n": 500,
+    "errors": 0,
+    "truncated": 0,
+    "accuracy": 0.888,
+    "macro_f1": 0.8829049059759526,
+    "latency_ms": {
+      "count": 500,
+      "mean": 1288.3800223264843,
+      "p50": 1257.2769159451127,
+      "p95": 1784.7090840805322,
+      "min": 798.6453330377117,
+      "max": 2565.610291901976
+    },
+    "decisions_per_second": 0.7759775719385504,
+    "mean_input_tokens": 275.058
+  },
+  "winnow:e4b | full": {
+    "n": 500,
+    "errors": 500,
+    "truncated": 0,
+    "accuracy": 0.0,
+    "macro_f1": 0.0,
+    "latency_ms": {
+      "count": 500,
+      "mean": 1.6295934319496155,
+      "p50": 1.8252090085297823,
+      "p95": 2.0530830370262265,
+      "min": 0.659208046272397,
+      "max": 3.8496250053867698
+    },
+    "decisions_per_second": 573.2121619632604,
+    "mean_input_tokens": 0.0
+  },
+  "kev:4b@kevserve | reduced": {
+    "n": 233,
+    "errors": 0,
+    "truncated": 0,
+    "accuracy": 0.9656652360515021,
+    "macro_f1": 0.9630797773654917,
+    "latency_ms": {
+      "count": 233,
+      "mean": 543.4967599961059,
+      "p50": 511.09612500295043,
+      "p95": 735.6104579521343,
+      "min": 372.07741697784513,
+      "max": 824.3275420973077
+    },
+    "decisions_per_second": 1.8395723597100475,
+    "mean_input_tokens": 136.17596566523605
+  },
+  "kev:4b@kevserve | full": {
+    "n": 500,
+    "errors": 0,
+    "truncated": 0,
+    "accuracy": 0.858,
+    "macro_f1": 0.8570367740676533,
+    "latency_ms": {
+      "count": 500,
+      "mean": 3500.714099968318,
+      "p50": 3153.07079104241,
+      "p95": 6388.98520800285,
+      "min": 2913.0865409970284,
+      "max": 7625.008958042599
+    },
+    "decisions_per_second": 0.28563883347506464,
+    "mean_input_tokens": 863.058
+  },
+  "decider:2b@decider | reduced": {
+    "n": 500,
+    "errors": 0,
+    "truncated": 0,
+    "accuracy": 0.96,
+    "macro_f1": 0.9587167161842486,
+    "latency_ms": {
+      "count": 500,
+      "mean": 527.3234331037384,
+      "p50": 491.9775410089642,
+      "p95": 784.3946249922737,
+      "min": 286.0537499655038,
+      "max": 1524.0391669794917
+    },
+    "decisions_per_second": 1.8955441473694856,
+    "mean_input_tokens": 154.236
+  },
+  "decider:2b@decider | full": {
+    "n": 500,
+    "errors": 0,
+    "truncated": 0,
+    "accuracy": 0.792,
+    "macro_f1": 0.7825458418609076,
+    "latency_ms": {
+      "count": 500,
+      "mean": 1934.7755175109487,
+      "p50": 1815.320499939844,
+      "p95": 2514.07662499696,
+      "min": 1605.953958001919,
+      "max": 3335.8124579535797
+    },
+    "decisions_per_second": 0.5168161597926738,
+    "mean_input_tokens": 1015.056
+  }
+}
