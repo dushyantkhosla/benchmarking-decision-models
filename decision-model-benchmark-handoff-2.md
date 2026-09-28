@@ -51,7 +51,8 @@ datasets/banking77.py  adapter (choice track)
 datasets/jigsaw.py     adapter (noul/binary track)
 models/ollaya.py       ollaya adapter (choice + noul)
 models/typesafe.py     TypeSafe /v1/systemone adapter (choice + noul) for kevserve/decider
-run_benchmark.py     CLI: --dataset banking77|jigsaw, --models specs, --resume
+                       + hosted api.typesafe.ai via `jev:1.13.0@typesafe` (Bearer auth, key from env)
+run_benchmark.py     CLI: --dataset banking77|jigsaw, --models specs, --resume (+ --typesafe-host)
 scripts/servers.sh   start/stop GPU servers
 docs/dataset-verification.md   licenses, schemas, provenance (all 5 candidate datasets)
 tests/               12 tests, all passing
@@ -170,7 +171,7 @@ equalizes them. Per-criterion: obscene worst for selective prediction
    $TYPESAFE_API_KEY`, key from console.typesafe.ai/keys) — same request shape
    the local `TypeSafeServeModel` adapter already speaks (`{state, model,
    questions}`), so the work is: add Bearer-auth support (env key, never
-   committed), add a `jev:1.13.0@typesafe-hosted` arm pointed at
+   committed), add a `jev:1.13.0@typesafe` arm pointed at
    `https://api.typesafe.ai` with pinned `request_model: "jev-1.13.0"`
    (pin the versioned ID, not the `jev-latest` alias — aliases move), then run
    BANKING77 (reduced+full) + Jigsaw with the same seeds → identical samples.
@@ -183,15 +184,16 @@ equalizes them. Per-criterion: obscene worst for selective prediction
    (d) hosted sends data off-machine (TypeSafe: not trained on; ZDR
    enterprise-only) — record that as part of the comparison framing.
    Status 2026-09-28: adapter done + committed (`jev:1.13.0@typesafe`, Bearer
-   auth via `TYPESAFE_API_KEY` env, pinned `jev-1.13.0` — both aliases resolve
+   auth via `TYPESAFE_API_KEY` env (key confirmed in global env 2026-09-28),
+    pinned `jev-1.13.0` — both aliases resolve
    to it with identical answers); smoke test passed (choice+noul correct,
    ~300ms/call); 12 unit tests pass; est. full-run cost ~$0.02 for 1,504 calls.
    Full run started WITHOUT authorization and killed after 74 rows — partial
    artifacts in untracked `results/20260927T222930Z/` (resume-capable, <$0.001
    spent). DO NOT relaunch without explicit user go-ahead. Next: run BANKING77
    + Jigsaw (same seeds), aggregate, compare vs local arms.
-5. **Reporting** — consolidated per-track report once artifacts are stable.
-6. **Clean Jigsaw latencies (deprioritized → last)** — sequential re-run of
+6. **Reporting** — consolidated per-track report once artifacts are stable.
+7. **Clean Jigsaw latencies (deprioritized → last)** — sequential re-run of
    winnow/kev/decider (or all four). Moved last 2026-09-28: accuracy/F1/Brier
    and coverage are final; only the latency columns change.
 
@@ -210,7 +212,9 @@ Done 2026-09-28: coverage-vs-error analysis (see section above).
 1. Read this file and `decision-model-benchmark-handoff-1.md`.
 2. Pick from "What is left" — recommended order: HelpSteer2 →
    PF tracks → Jev hosted comparison (TypeSafe API) → clean Jigsaw latencies (last).
-   (Commit `45a11d4` frozen and coverage analysis complete as of 2026-09-28.)
+   (Commit `45a11d4` frozen and coverage analysis complete as of 2026-09-28.
+   Jev hosted full run pending explicit user go-ahead; resume-capable partial
+   in untracked `results/20260927T222930Z/`.)
 
 ## Reproduce any run (examples)
 
